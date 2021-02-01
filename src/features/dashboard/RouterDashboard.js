@@ -5,50 +5,32 @@ import NavApp from "./navigation/NavApp";
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import {v4 as uuid} from 'uuid';
 import Loading from "../../components/loading/Loading";
-
+import ServicesFireBase from "../../services/firebase/servicesFireBase/ServicesFireBase";
 const Product = lazy(() => import('../product/Product'));
 
-export default class App extends Component {
+export default class RouterDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             products: [],
             loaded: false
         }
+        this.onDataChange = this.onDataChange.bind(this);
     }
 
-    componentWillMount() {
-        apiFirebase.get('product-owner.json/0')
-            .then(apiFirebase => {
-                let products = apiFirebase.data ? Object.values(apiFirebase.data) : [];
-                this.updateProducts(products);
-            }).catch(e => console.log(e))
+    componentDidMount() {
+        ServicesFireBase.getAll("product-owner/" + this.props.userToken).on("value", this.onDataChange);
     }
 
-    updateProducts = (products) => {
-        this.setState({
-            products,
+    onDataChange(products) {
+        this.setState((props, state) => ({
+            products: products.val() ? products.val() : [],
             loaded: true
-        })
+        }))
     }
 
     addProduct = (product) => {
-        const products = this.state.products;
-        // uuid()
-        products.push({name: product.name, description: product.description, uuid: uuid()});
-        this.setState({
-            products
-        }, () => {
-            this.saveProducts();
-        })
-    }
-
-    initProduct = (newProduct) => {
-        apiFirebase.get(newProduct + '.json')
-            .then(apiFirebase => {
-                let newProduct = apiFirebase.data ? Object.values(apiFirebase.data) : [];
-                this.updateProducts(newProduct);
-            }).catch(e => console.log(e))
+        ServicesFireBase.create("product-owner/" + this.props.userToken, {name: product.name, description: product.description, uuid: uuid()})
     }
 
     updateProduct = (product) => {

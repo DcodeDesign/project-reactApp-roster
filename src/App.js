@@ -9,15 +9,18 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            authenticated: false
+            authenticated: false,
+            user:[]
         }
     }
 
     componentDidMount() {
         firebase.auth().onAuthStateChanged(
             (auth) => {
+                console.log(auth);
                 this.setState({
-                        authenticated: auth ? true : false
+                        authenticated: auth ? true : false,
+                        user:auth.uid
                     }
                 )
             }
@@ -31,7 +34,7 @@ export default class App extends Component {
                     <Detector render={({online}) => (
                         <div>
                             {online ? (
-                                   <RouterConnexion authenticated={this.state.authenticated} />
+                                   <RouterConnexion userToken={this.state.user} authenticated={this.state.authenticated} />
                             ) : (
                                 <Off/>
                             )}

@@ -35,7 +35,7 @@ class Login extends Component {
         firebase.auth()
             .signInWithEmailAndPassword(email, password)
             .then((user) => {
-                this.props.history.push('/');
+                this.props.history.push('/dashboard');
             })
             .catch((error) => {
                 this.setState({error: error});
@@ -45,7 +45,6 @@ class Login extends Component {
     render() {
         const {email, password, error} = this.state;
         const {classes} = this.props
-        console.log(this.props)
         return (
             <>
                 <div className={classes.root}>
@@ -54,10 +53,9 @@ class Login extends Component {
                     ) : null}
                     <Card className={classes.card}>
                         <CardActionArea className={classes.cardHeader}>
-                            <h2>Roster</h2>
+                            <h2>Roster®</h2>
                         </CardActionArea >
                         <CardContent>
-
                             <Typography className={classes.title} color="textSecondary" gutterBottom>
                                 Log In
                             </Typography>
@@ -80,7 +78,9 @@ class Login extends Component {
                                            placeholder="Password"
                                            value={password}
                                            onChange={this.handleInputChange} />
-                                <Button className={classes.button} variant="contained" color="primary">
+                                <Button type={"submit"}
+                                        className={classes.button}
+                                        variant="contained" color="primary">
                                     Log In
                                 </Button>
                             </form>

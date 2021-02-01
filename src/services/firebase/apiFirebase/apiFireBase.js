@@ -5,7 +5,7 @@ var database = firebase.database();
 export const apiFirebase = axios.create({
     baseURL:'https://rosterdev-5f258-default-rtdb.europe-west1.firebasedatabase.app/'
 })
-
+// http://cis-linux2.temple.edu:8080/fa16_4350_tuf09209/tutorial/tutorial.html
 /** owners/[uuid]
  * name: string
  * last_name: string
@@ -20,6 +20,31 @@ export const apiFirebase = axios.create({
  * puuid: number
  * members : object
  */
+
+/** READ
+ * database.ref("users/ada");
+ * database.ref("users/ada").child('ada')
+ */
+
+/** GET */
+/*
+console.log("GET",database.ref('product-owner').orderByChild("name").limitToLast(1000).once);
+*/
+
+/** GET EVENT */
+/*
+database.ref('product-owner').on("child_added", function(snapshot) {
+    console.log("child_added" ,snapshot.key, snapshot.val() );
+})
+
+database.ref('product-owner').on("child_changed", function(snapshot) {
+    console.log("child_changed" ,snapshot.key, snapshot.val() );
+})
+
+database.ref('product-owner').on("child_removed", function(snapshot) {
+    console.log("child_removed",snapshot.key, snapshot.val() );
+})
+*/
 
 /*
 Promise.all([
